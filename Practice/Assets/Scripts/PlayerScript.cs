@@ -7,7 +7,7 @@ public class PlayerScript : MonoBehaviour
 {
     public float Speed = 3.0f;
     private Rigidbody _rigidbody;
-    public int VictoryPoint = 0;
+    public int VictoryPoint;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();

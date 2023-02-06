@@ -6,6 +6,10 @@ public sealed class BadBonus : InteractiveObject, IFly, IRotation
 {
     private float _lengthFlay;
     private float _speedRotation;
+
+    public delegate void CaughtPlayerChangeBad();
+    public CaughtPlayerChangeBad CaughtPlayerBad;
+
     private void Awake()
     {
         _lengthFlay = Random.Range(1.0f, 5.0f);
@@ -15,6 +19,7 @@ public sealed class BadBonus : InteractiveObject, IFly, IRotation
     {
         player.TryGetComponent(out PlayerScript playerScript);
         playerScript.Speed -= 1;
+        CaughtPlayerBad();
     }
     public void Fly()
     {

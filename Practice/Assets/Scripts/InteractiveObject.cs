@@ -29,11 +29,22 @@ public abstract class InteractiveObject : MonoBehaviour, IInteractable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        try
         {
-            player = other;
-            Interaction();
-            Destroy(gameObject);
+            if (other.CompareTag("Player"))
+            {
+                player = other;
+                Interaction();
+                Destroy(gameObject);
+            }
+            else
+            {
+                throw new MyException("Это не игрок - ",other.tag);
+            }
+        }
+        catch (MyException exc)
+        {
+            Debug.Log($"{exc.Message}{exc.tag}");
         }
         
     }
