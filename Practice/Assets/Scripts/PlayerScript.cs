@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Debug;
 
 public class PlayerScript : MonoBehaviour
 {
     public float Speed = 3.0f;
     private Rigidbody _rigidbody;
+    public int VictoryPoint = 0;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -14,6 +16,7 @@ public class PlayerScript : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+        Victory();
     }
 
     public void Move()
@@ -24,5 +27,12 @@ public class PlayerScript : MonoBehaviour
         _rigidbody.AddForce(movement * -Speed);
     }
 
+    public void Victory()
+    {
+        if (VictoryPoint == 5)
+        {
+            Log("Победа");
+        }
+    }
 
 }
