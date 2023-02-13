@@ -8,6 +8,9 @@ public sealed class GoodBonus : InteractiveObject, IRotation, IFlicker
     private Material _material;
     private float _speedRotation;
     private DisplayBonuses _displayBonuses;
+    public delegate void CaughtPlayerChangeGood();
+    public CaughtPlayerChangeGood CaughtPlayerGood;
+
     private void Awake()
     {
         _material = GetComponent<Renderer>().material;
@@ -20,11 +23,14 @@ public sealed class GoodBonus : InteractiveObject, IRotation, IFlicker
         {
             player.TryGetComponent(out PlayerScript playerScript);
             playerScript.VictoryPoint += 1;
+            playerScript.Speed += 1;
+            CaughtPlayerGood();
         }
         else
         {
             player.TryGetComponent(out PlayerScript playerScript);
             playerScript.Speed += 1;
+            CaughtPlayerGood();
         }
     }
 
