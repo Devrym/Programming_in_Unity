@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour
+public class CameraScript : IExecute
 {
-        public PlayerScript Player;
-        private Vector3 _offset;
-        private void Start()
-        {
-            _offset = transform.position - Player.transform.position;
-        }
-        private void LateUpdate()
-        {
-            transform.position = Player.transform.position + _offset;
-        }
+    private Transform _player;
+    private Transform _mainCamera;
+    private Vector3 _offset;
+    public CameraScript(Transform player, Transform mainCamera)
+    {
+        _player = player;
+        _mainCamera = mainCamera;
+        _mainCamera.LookAt(_player);
+        _offset = _mainCamera.position - _player.position;
+    }
+    public void Execute()
+    {
+        _mainCamera.position = _player.position + _offset;
+    }
 
- }
+}

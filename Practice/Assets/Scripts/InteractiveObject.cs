@@ -2,45 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class InteractiveObject : MonoBehaviour, IInteractable
+public abstract class InteractiveObject : MonoBehaviour, IExecute
 {
-    public bool IsInteractable { get; } = true;
+    protected Color _color;
+    private bool _isInteractable;
+    protected bool IsInteractable
+    {
+        get { return _isInteractable; }
+        private set
+        {
+            _isInteractable = value;
+            GetComponent<Renderer>().enabled = _isInteractable;
+            GetComponent<Collider>().enabled = _isInteractable;
+        }
+    }
     public Collider player;
-    protected abstract void Interaction();
     private void Start()
     {
-        ((IAction)this).Action();
-        ((IInitialization)this).Action();
-    }
-    void IAction.Action()
-    {
+        IsInteractable = true;
+        _color = Random.ColorHSV();
         if (TryGetComponent(out Renderer renderer))
         {
-            renderer.material.color = Random.ColorHSV();
+            renderer.material.color = _color;
         }
     }
-    void IInitialization.Action()
-    {
-        if (TryGetComponent(out Renderer renderer))
-        {
-            renderer.material.color = Random.ColorHSV();
-        }
-    }
+
+    protected abstract void Interaction();
+    public abstract void Execute();
 
     private void OnTriggerEnter(Collider other)
     {
         try
         {
-            if (other.CompareTag("Player"))
+            if (!IsInteractable || !other.CompareTag("Player"))
             {
-                player = other;
-                Interaction();
-                Destroy(gameObject);
+                return;
             }
-            else
-            {
-                throw new MyException("Это не игрок - ",other.tag);
-            }
+            player = other;
+            Interaction();
+            IsInteractable = false;
+            //if (other.CompareTag("Player"))
+            //{
+            
+            //    Interaction();
+            //    Destroy(gameObject);
+            //}
+            //else
+            //{
+            //    throw new MyException("Это не игрок - ",other.tag);
+            //}
         }
         catch (MyException exc)
         {
