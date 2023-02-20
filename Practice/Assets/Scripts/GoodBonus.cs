@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public sealed class GoodBonus : InteractiveObject, IRotation, IFlicker
 {
     [SerializeField] bool Need;
+    public int Point = 1;
+    public event Action<int> OnPointChange = delegate (int i) { };
     private Material _material;
     private float _speedRotation;
     private DisplayBonuses _displayBonuses;
@@ -15,23 +19,32 @@ public sealed class GoodBonus : InteractiveObject, IRotation, IFlicker
     {
         _material = GetComponent<Renderer>().material;
         _speedRotation = Random.Range(10.0f, 50.0f);
-        _displayBonuses = new DisplayBonuses();
+        //_displayBonuses = new DisplayBonuses();
     }
     protected override void Interaction()
     {
+        OnPointChange.Invoke(Point);
+
         if (Need)
         {
             player.TryGetComponent(out PlayerScript playerScript);
             playerScript.VictoryPoint += 1;
             playerScript.Speed += 1;
-            CaughtPlayerGood();
+            //CaughtPlayerGood();
         }
         else
         {
             player.TryGetComponent(out PlayerScript playerScript);
             playerScript.Speed += 1;
-            CaughtPlayerGood();
+            //CaughtPlayerGood();
         }
+    }
+
+    public override void Execute()
+    {
+        if (!IsInteractable) { return; }
+        Rotation();
+        Flicker();
     }
 
     public void Flicker()
