@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ using static UnityEngine.Debug;
 
 public abstract class PlayerScript : MonoBehaviour
 {
+
+    string s = "сиииссссссснннннннррри";
+    
     public float Speed = 3.0f;
     public int VictoryPoint;
     [SerializeField] GameObject _win;
@@ -15,7 +19,11 @@ public abstract class PlayerScript : MonoBehaviour
 
     private void FixedUpdate()
     {
+        char c = 'и';
+        int i = s.CharCount(c);
         Victory();
+        Debug.Log(i);
+        CollectionList.listCollection();
     }
 
 
@@ -29,5 +37,6 @@ public abstract class PlayerScript : MonoBehaviour
             _win.GetComponent<Text>().text = "ПОБЕДА!";
         }
     }
+
 
 }
